@@ -1,0 +1,164 @@
+// ─────────────────────────────────────────────────────────────────────────
+// Matro Indoor Sports Booking — Prisma Schema
+//
+// Database:
+//   Local XAMPP MySQL (configure DATABASE_URL in server/.env)
+//
+// To apply changes:
+//   npx prisma migrate dev --name <description>
+//
+// Naming conventions:
+//   Tables     : PascalCase (Prisma model names)
+//   Columns    : camelCase
+//   FK columns : <relation>Id
+// ─────────────────────────────────────────────────────────────────────────
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// VENUE
+// ─────────────────────────────────────────────────────────────────────────
+model Venue {
+  id             String   @id              // e.g. "fr-dha-phase-5"
+  name           String
+  shortName      String
+  city           String                   // "Lahore" | "Sialkot"
+  address        String
+  location       String                   // human-readable area
+  operatingHours String                   // e.g. "06:00 AM – 02:00 AM"
+  badge          String?
+  imageUrl       String?
+  rating         Float?
+  reviewsCount   Int      @default(0)
+  startingPrice  Int                      // Rs per hour (lowest court)
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  courts         Court[]
+
+  @@index([city])
+  @@index([isActive])
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// COURT
+// ─────────────────────────────────────────────────────────────────────────
+model Court {
+  id          String  @id              // e.g. "dha-c1"
+  venueId     String
+  name        String
+  sport       String                   // "cricket"|"futsal"|"padel"|"pickleball"|"badminton"|"gaming"
+  surfaceType String?                  // "Shock Pad Turf", "Panoramic Glass", …
+  isActive    Boolean @default(true)
+  sortOrder   Int     @default(0)
+
+  venue        Venue          @relation(fields: [venueId], references: [id], onDelete: Cascade)
+  pricingRules PricingRule[]
+  bookings     Booking[]
+
+  @@index([venueId])
+  @@index([sport])
+  @@index([venueId, sport])
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// PRICING RULE
+// One rule = one (dayType × period) combination for a court.
+// All prices are PKR per hour.
+//
+// dayType : "weekday" (Mon–Thu) | "weekend" (Fri–Sun)
+// period  : "off_peak" (05:00–17:00) | "peak" (17:00–05:00)
+// ─────────────────────────────────────────────────────────────────────────
+model PricingRule {
+  id           Int     @id @default(autoincrement())
+  courtId      String
+  dayType      String  // "weekday" | "weekend"
+  period       String  // "off_peak" | "peak"
+  pricePerHour Int     // PKR
+  isActive     Boolean @default(true)
+
+  court Court @relation(fields: [courtId], references: [id], onDelete: Cascade)
+
+  @@unique([courtId, dayType, period])
+  @@index([courtId])
+  @@index([isActive])
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// USER
+// Phase C: phone + password authentication.
+// Passwords are stored as bcrypt hashes — NEVER plaintext.
+// role:     "USER" (customer) | "ADMIN" (venue staff / system admin)
+// isActive: soft-disable an account without deleting records.
+// ─────────────────────────────────────────────────────────────────────────
+model User {
+  id           Int      @id @default(autoincrement())
+  phone        String?  @unique            // international format e.g. "+923001234567"
+  email        String?  @unique
+  name         String?
+  passwordHash String                      // bcrypt hash, never plaintext
+  role         String   @default("USER")  // "USER" | "ADMIN"
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  bookings     Booking[]
+
+  @@index([phone])
+  @@index([email])
+  @@index([role])
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// BOOKING
+//
+// status       : PENDING → CONFIRMED → CANCELLED | NO_SHOW | COMPLETED
+// paymentStatus: UNPAID → PAID | REFUNDED | WAIVED
+//
+// Overlap prevention:
+//   Booking writes lock the Court row and check overlapping active bookings
+//   in the same transaction. This also allows a cancelled slot to be booked
+//   again, which an unconditional unique booking key would prevent.
+// ─────────────────────────────────────────────────────────────────────────
+model Booking {
+  id            String   @id @default(cuid())
+  courtId       String?                       // nullable: set to null when a court is deleted to preserve booking history
+  userId        Int?                          // nullable until auth is implemented
+  playerName    String
+  phone         String
+  notes         String   @default("")
+
+  date          String                        // ISO "YYYY-MM-DD" in PKT
+  startTime     String                        // "HH:MM" 24-hr PKT
+  endTime       String                        // "HH:MM" 24-hr PKT
+  durationHours Int
+
+  pricePerHour  Int                           // captured from PricingRule at booking time
+  totalAmount   Int                           // pricePerHour × durationHours
+
+  status        String   @default("CONFIRMED")
+  // PENDING | CONFIRMED | CANCELLED | NO_SHOW | COMPLETED
+
+  paymentStatus String   @default("UNPAID")
+  // UNPAID | PAID | REFUNDED | WAIVED
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  court   Court? @relation(fields: [courtId], references: [id], onDelete: SetNull)
+  user    User? @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([courtId, date, startTime])
+  @@index([date])
+  @@index([status])
+  @@index([phone])
+}

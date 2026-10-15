@@ -1,0 +1,24 @@
+{
+  "verdict": "CHANGES_REQUESTED",
+  "findings": [
+    {
+      "severity": "MEDIUM",
+      "description": "PATCH /admin/bookings/:id/status uses updateMany as an optimistic lock then reads the final state with an unconditioned findUnique. A concurrent request that wins the lock and immediately makes another transition can cause the response to reflect a status this request did not set, misleading the caller.",
+      "file": "server/src/routes/admin.js",
+      "fix": "Replace the updateMany + findUnique pattern with a single prisma.booking.update({ where: { id, status: booking.status }, data }) call. Prisma throws P2025 if the row's status changed since the earlier read; catch that and return a 400."
+    },
+    {
+      "severity": "HIGH",
+      "description": "No build log, CI artifact, or terminal output exists in the workspace or task directory. A passing build cannot be confirmed.",
+      "file": "N/A",
+      "fix": "Coder must run npm run build (or the project's equivalent) and supply the output as evidence before this review can be approved."
+    },
+    {
+      "severity": "LOW",
+      "description": "The Venues panel loads all venues in one request and filters client-side, while Bookings and Users both use server-side search and pagination. This is harmless at current scale but diverges from the established pattern.",
+      "file": "src/pages/AdminDashboard.jsx",
+      "fix": "Consider aligning venue search with the server-side pattern used by the other panels, or explicitly document the intentional exception to prevent it being copied as the default approach."
+    }
+  ],
+  "reviewDoc": "c:\\Users\\ST\\OneDrive\\Desktop\\matro indoor booking website\\.agents\\tasks\\phase2-review.md"
+}

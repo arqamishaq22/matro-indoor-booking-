@@ -1,0 +1,756 @@
+/* ==========================================================================
+   MATRO INDOOR SPORTS BOOKING — VISUAL DESIGN SYSTEM
+   ─────────────────────────────────────────────────────
+   Font:      Manrope 400 / 500 / 600 / 700 / 800
+   Direction: Premium · Modern · Energetic · Sporty
+              Clean · Trustworthy · Professional
+   Themes:    True dual-mode (light default + dark override)
+   Strategy:  Raw palette → semantic aliases → component tokens
+              Components only reference semantic aliases, never raw values.
+   ========================================================================== */
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   1. TYPOGRAPHY SYSTEM
+   ══════════════════════════════════════════════════════════════════════════ */
+:root {
+  color-scheme: light;
+
+  /* Font stacks */
+  --font-primary:  'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+                   Roboto, Helvetica, Arial, sans-serif;
+  --font-heading:  var(--font-primary);
+  --font-body:     var(--font-primary);
+  --font-mono:     'JetBrains Mono', 'Fira Code', 'Cascadia Code',
+                   ui-monospace, monospace;
+
+  /* Font weights */
+  --fw-regular:    400;
+  --fw-medium:     500;
+  --fw-semibold:   600;
+  --fw-bold:       700;
+  --fw-extrabold:  800;
+
+  /* Fluid type scale — clamp(min, preferred-vw, max) */
+  --text-xs:   0.75rem;    /* 12px */
+  --text-sm:   0.875rem;   /* 14px */
+  --text-base: 1rem;       /* 16px */
+  --text-lg:   1.125rem;   /* 18px */
+  --text-xl:   1.25rem;    /* 20px */
+  --text-2xl:  1.5rem;     /* 24px */
+  --text-3xl:  1.875rem;   /* 30px */
+  --text-4xl:  2.25rem;    /* 36px */
+  --text-5xl:  3rem;       /* 48px */
+
+  /* Line heights */
+  --lh-xs:    1.4;
+  --lh-sm:    1.5;
+  --lh-base:  1.65;
+  --lh-lg:    1.6;
+  --lh-xl:    1.5;
+  --lh-2xl:   1.35;
+  --lh-3xl:   1.28;
+  --lh-4xl:   1.2;
+  --lh-5xl:   1.12;
+
+  /* Letter spacing */
+  --tracking-tighter: -0.035em;
+  --tracking-tight:   -0.02em;
+  --tracking-normal:   0em;
+  --tracking-wide:     0.03em;
+  --tracking-wider:    0.07em;
+  --tracking-widest:   0.12em;
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   2. SPACING & LAYOUT
+   ══════════════════════════════════════════════════════════════════════════ */
+
+  --space-0:   0px;
+  --space-1:   0.25rem;   /*  4px */
+  --space-2:   0.5rem;    /*  8px */
+  --space-3:   0.75rem;   /* 12px */
+  --space-4:   1rem;      /* 16px */
+  --space-5:   1.25rem;   /* 20px */
+  --space-6:   1.5rem;    /* 24px */
+  --space-8:   2rem;      /* 32px */
+  --space-10:  2.5rem;    /* 40px */
+  --space-12:  3rem;      /* 48px */
+  --space-16:  4rem;      /* 64px */
+  --space-20:  5rem;      /* 80px */
+  --space-24:  6rem;      /* 96px */
+  --space-32:  8rem;      /* 128px */
+
+  --container-max-width: 1280px;
+  --container-padding:   clamp(1rem, 4vw, 1.5rem);
+
+  /* Section vertical rhythm — generous breathing room */
+  --section-padding-y:   clamp(4.5rem, 8vw, 7rem);
+  --section-gap:         clamp(3rem, 6vw, 5rem);
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   3. BORDER RADIUS SCALE
+   ══════════════════════════════════════════════════════════════════════════ */
+
+  --radius-xs:   4px;
+  --radius-sm:   10px;
+  --radius-md:   14px;
+  --radius-lg:   18px;
+  --radius-xl:   22px;    /* Standard card */
+  --radius-2xl:  30px;    /* Large feature card / hero panel */
+  --radius-3xl:  40px;    /* Oversized decorative */
+  --radius-full: 9999px;  /* Pill / avatar */
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   4. Z-INDEX SCALE  (prevents magic numbers across components)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+  --z-below:    -1;
+  --z-base:      0;
+  --z-raised:   10;
+  --z-dropdown: 100;
+  --z-sticky:   200;
+  --z-overlay:  500;
+  --z-modal:    600;
+  --z-nav:     1000;
+  --z-toast:   9000;
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   5. MOTION / EASING TOKENS
+   ══════════════════════════════════════════════════════════════════════════ */
+
+  /* Named easing curves */
+  --ease-standard:    cubic-bezier(0.2,  0,    0,    1);
+  --ease-decelerate:  cubic-bezier(0,    0,    0.2,  1);
+  --ease-accelerate:  cubic-bezier(0.4,  0,    1,    1);
+  --ease-spring:      cubic-bezier(0.16, 1,    0.3,  1);
+  --ease-bounce:      cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Duration ladder */
+  --duration-instant:  80ms;
+  --duration-fast:    150ms;
+  --duration-normal:  250ms;
+  --duration-smooth:  350ms;
+  --duration-slow:    500ms;
+
+  /* Shorthand transition tokens */
+  --transition-fast:   var(--duration-fast)   var(--ease-standard);
+  --transition-normal: var(--duration-normal) var(--ease-standard);
+  --transition-smooth: var(--duration-smooth) var(--ease-spring);
+  --transition-bounce: 400ms                  var(--ease-bounce);
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   6. RAW COLOR PALETTE (theme-neutral primitives)
+      Components NEVER use raw palette tokens — always go through semantics.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+  /* ── Greens (Sport / Primary) */
+  --palette-green-400:  #34d399;
+  --palette-green-500:  #10b981;
+  --palette-green-600:  #059669;
+  --palette-green-700:  #047857;
+  --palette-green-800:  #065f46;
+
+  /* ── Blues (Precision / Secondary) */
+  --palette-blue-400:   #38bdf8;
+  --palette-blue-500:   #0ea5e9;
+  --palette-blue-600:   #0284c7;
+  --palette-blue-700:   #0369a1;
+  --palette-blue-800:   #075985;
+
+  /* ── Ambers (Energy / Accent) */
+  --palette-amber-300:  #fcd34d;
+  --palette-amber-400:  #fbbf24;
+  --palette-amber-500:  #f59e0b;
+  --palette-amber-600:  #d97706;
+  --palette-amber-700:  #b45309;
+
+  /* ── Reds (Danger) */
+  --palette-red-400:    #f87171;
+  --palette-red-500:    #ef4444;
+  --palette-red-600:    #dc2626;
+
+  /* ── Neutrals (Slate) */
+  --palette-slate-50:   #f8fafc;
+  --palette-slate-100:  #f1f5f9;
+  --palette-slate-200:  #e2e8f0;
+  --palette-slate-300:  #cbd5e1;
+  --palette-slate-400:  #94a3b8;
+  --palette-slate-500:  #64748b;
+  --palette-slate-600:  #475569;
+  --palette-slate-700:  #334155;
+  --palette-slate-800:  #1e293b;
+  --palette-slate-900:  #0f172a;
+  --palette-slate-950:  #090e17;
+
+  /* ── Sport category accent hues (used in sport cards/badges) */
+  --palette-cricket-from:  #059669;
+  --palette-cricket-to:    #0d9488;
+  --palette-futsal-from:   #0284c7;
+  --palette-futsal-to:     #6366f1;
+  --palette-padel-from:    #d97706;
+  --palette-padel-to:      #dc2626;
+  --palette-pickleball-from: #7c3aed;
+  --palette-pickleball-to:   #2563eb;
+  --palette-badminton-from: #0891b2;
+  --palette-badminton-to:   #059669;
+  --palette-gaming-from:   #7c3aed;
+  --palette-gaming-to:     #db2777;
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   7. LIGHT THEME SEMANTICS  (applied via :root — light is the baseline)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+  /* ── Surface stack (3 levels of depth) */
+  --color-bg:               var(--palette-slate-50);    /* Page canvas */
+  --color-surface:          #ffffff;                    /* Primary card/panel */
+  --color-surface-muted:    var(--palette-slate-100);   /* Section band alt */
+  --color-surface-elevated: #ffffff;                    /* Popovers, modals */
+  --color-surface-card:     #ffffff;                    /* Product cards */
+  --color-surface-inset:    var(--palette-slate-100);   /* Input bg, well */
+
+  /* ── Brand palette */
+  --color-primary:          var(--palette-green-600);
+  --color-primary-hover:    var(--palette-green-700);
+  --color-primary-active:   var(--palette-green-800);
+  --color-primary-glow:     rgba(5, 150, 105, 0.18);
+  --color-primary-soft:     rgba(5, 150, 105, 0.08);
+  --color-primary-border:   rgba(5, 150, 105, 0.28);
+
+  --color-secondary:        var(--palette-blue-600);
+  --color-secondary-hover:  var(--palette-blue-700);
+  --color-secondary-soft:   rgba(2, 132, 199, 0.08);
+
+  --color-accent:           var(--palette-amber-600);
+  --color-accent-hover:     var(--palette-amber-700);
+  --color-accent-soft:      rgba(217, 119, 6, 0.08);
+  --color-accent-glow:      rgba(217, 119, 6, 0.2);
+
+  --color-danger:           var(--palette-red-600);
+  --color-danger-soft:      rgba(220, 38, 38, 0.08);
+
+  --color-success:          var(--palette-green-600);
+  --color-success-soft:     rgba(5, 150, 105, 0.08);
+
+  /* ── Typography */
+  --color-text-primary:     var(--palette-slate-900);   /* Headings, body */
+  --color-text-secondary:   var(--palette-slate-700);   /* Supporting copy */
+  --color-text-muted:       var(--palette-slate-500);   /* Labels, captions */
+  --color-text-faint:       var(--palette-slate-400);   /* Placeholders */
+  --color-text-inverse:     #ffffff;
+  --color-text-on-primary:  #090e17;
+
+  /* ── Borders */
+  --color-border-subtle:    rgba(15, 23, 42, 0.07);
+  --color-border-card:      rgba(15, 23, 42, 0.09);
+  --color-border-hover:     rgba(15, 23, 42, 0.18);
+  --color-border-focus:     var(--palette-green-600);
+  --color-border-strong:    rgba(15, 23, 42, 0.28);
+
+  /* ── Shadows (crisp, no muddy grays) */
+  --shadow-xs:  0 1px 2px   0    rgba(15,23,42,0.04);
+  --shadow-sm:  0 2px 5px   0    rgba(15,23,42,0.05),
+                0 1px 2px   0    rgba(15,23,42,0.03);
+  --shadow-md:  0 6px 18px -3px  rgba(15,23,42,0.07),
+                0 2px 6px  -1px  rgba(15,23,42,0.04);
+  --shadow-lg:  0 14px 30px -4px rgba(15,23,42,0.09),
+                0 4px  10px -2px rgba(15,23,42,0.03);
+  --shadow-xl:  0 24px 48px -8px rgba(15,23,42,0.12),
+                0 8px  16px -4px rgba(15,23,42,0.05);
+  --shadow-2xl: 0 40px 80px -12px rgba(15,23,42,0.16);
+
+  /* Colored glows — only for CTAs and key anchors */
+  --shadow-brand:  0 4px 20px var(--color-primary-glow);
+  --shadow-accent: 0 4px 20px rgba(217,119,6,0.18);
+
+  /* ── Interactive states */
+  --color-bg-hover:         var(--palette-slate-100);
+  --color-bg-active:        var(--palette-slate-200);
+  --color-overlay:          rgba(15, 23, 42, 0.55);
+
+  /* ── Nav */
+  --color-nav-bg:           rgba(255, 255, 255, 0.92);
+  --color-nav-border:       rgba(15, 23, 42, 0.08);
+
+  /* ── CTA gradient (primary button, hero CTA) */
+  --gradient-cta:           linear-gradient(135deg,
+                              var(--palette-green-600) 0%,
+                              var(--palette-green-500) 100%);
+  --gradient-cta-hover:     linear-gradient(135deg,
+                              var(--palette-green-700) 0%,
+                              var(--palette-green-600) 100%);
+
+  /* ── Premium heading gradient (used sparingly — hero only) */
+  --gradient-heading:       linear-gradient(135deg,
+                              var(--palette-green-600) 0%,
+                              var(--palette-blue-500)  100%);
+  --gradient-heading-amber: linear-gradient(135deg,
+                              var(--palette-amber-600) 0%,
+                              var(--palette-red-500)   100%);
+
+  /* ── Hero ambient glow */
+  --gradient-hero-glow:     radial-gradient(ellipse at 50% 0%,
+                              var(--color-primary-glow) 0%,
+                              rgba(2,132,199,0.06) 50%,
+                              transparent 75%);
+
+  /* ── Slot / availability tokens */
+  --slot-available-bg:     rgba(5, 150, 105, 0.08);
+  --slot-available-border: rgba(5, 150, 105, 0.24);
+  --slot-available-text:   var(--palette-green-700);
+  --slot-booked-bg:        var(--palette-slate-100);
+  --slot-booked-border:    var(--palette-slate-200);
+  --slot-booked-text:      var(--palette-slate-400);
+  --slot-peak-bg:          rgba(217, 119, 6, 0.10);
+  --slot-peak-border:      rgba(217, 119, 6, 0.24);
+  --slot-peak-text:        var(--palette-amber-700);
+
+  /* ── Badge tokens */
+  --badge-bg:              var(--color-primary-soft);
+  --badge-border:          var(--color-primary-border);
+  --badge-text:            var(--color-primary);
+
+  /* ── Form tokens */
+  --color-input-bg:        #ffffff;
+  --color-input-bg-hover:  var(--palette-slate-50);
+  --color-input-border:    var(--color-border-subtle);
+  --color-input-border-hover: var(--color-border-hover);
+  --color-input-border-focus: var(--color-border-focus);
+  --shadow-input-focus:    0 0 0 3px var(--color-primary-glow);
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   8. SEMANTIC ALIASES  (what components actually use)
+      One hop: component → alias → raw token.
+      Changing a theme only requires updating the alias layer.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+  /* Backgrounds */
+  --bg-main:              var(--color-bg);
+  --bg-surface:           var(--color-surface-muted);
+  --bg-surface-elevated:  var(--color-surface-elevated);
+  --bg-surface-card:      var(--color-surface-card);
+  --bg-surface-inset:     var(--color-surface-inset);
+  --bg-glass:             rgba(255,255,255,0.92);
+  --bg-glass-heavy:       rgba(255,255,255,0.97);
+  --bg-input:             var(--color-input-bg);
+  --bg-hover:             var(--color-bg-hover);
+  --bg-active:            var(--color-bg-active);
+
+  /* Typography */
+  --text-primary:         var(--color-text-primary);
+  --text-secondary:       var(--color-text-secondary);
+  --text-muted:           var(--color-text-muted);
+  --text-faint:           var(--color-text-faint);
+  --text-inverse:         var(--color-text-inverse);
+  --text-on-primary:      var(--color-text-on-primary);
+
+  /* Borders */
+  --border-subtle:        var(--color-border-subtle);
+  --border-card:          var(--color-border-card);
+  --border-hover:         var(--color-border-hover);
+  --border-focus:         var(--color-border-focus);
+  --border-strong:        var(--color-border-strong);
+
+  /* Brand */
+  --brand-primary:        var(--color-primary);
+  --brand-primary-hover:  var(--color-primary-hover);
+  --brand-primary-glow:   var(--color-primary-glow);
+  --brand-primary-soft:   var(--color-primary-soft);
+  --brand-secondary:      var(--color-secondary);
+  --brand-secondary-hover:var(--color-secondary-hover);
+  --brand-accent:         var(--color-accent);
+  --brand-accent-hover:   var(--color-accent-hover);
+  --brand-accent-glow:    var(--color-accent-glow);
+  --brand-danger:         var(--color-danger);
+
+  /* Cards & components */
+  --card-bg:              var(--bg-surface-card);
+  --card-border:          var(--border-card);
+  --card-shadow:          var(--shadow-md);
+  --card-shadow-elevated: var(--shadow-lg);
+  --card-radius:          var(--radius-xl);
+
+  /* Nav */
+  --nav-backdrop:         var(--color-nav-bg);
+  --nav-border:           var(--color-nav-border);
+  --nav-height:           72px;
+  --nav-height-compact:   58px;
+
+  /* Overlay */
+  --overlay-bg:           var(--color-overlay);
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   9. EXPLICIT LIGHT THEME SELECTOR
+      Matches when toggled programmatically — mirrors :root values
+      so no flicker on theme switch.
+   ══════════════════════════════════════════════════════════════════════════ */
+[data-theme="light"],
+.light {
+  color-scheme: light;
+  --color-bg:               var(--palette-slate-50);
+  --color-surface:          #ffffff;
+  --color-surface-muted:    var(--palette-slate-100);
+  --color-surface-elevated: #ffffff;
+  --color-surface-card:     #ffffff;
+  --color-surface-inset:    var(--palette-slate-100);
+
+  --color-primary:          var(--palette-green-600);
+  --color-primary-hover:    var(--palette-green-700);
+  --color-primary-active:   var(--palette-green-800);
+  --color-primary-glow:     rgba(5, 150, 105, 0.18);
+  --color-primary-soft:     rgba(5, 150, 105, 0.08);
+  --color-primary-border:   rgba(5, 150, 105, 0.28);
+
+  --color-secondary:        var(--palette-blue-600);
+  --color-secondary-hover:  var(--palette-blue-700);
+  --color-secondary-soft:   rgba(2, 132, 199, 0.08);
+
+  --color-accent:           var(--palette-amber-600);
+  --color-accent-hover:     var(--palette-amber-700);
+  --color-accent-soft:      rgba(217, 119, 6, 0.08);
+  --color-accent-glow:      rgba(217, 119, 6, 0.2);
+
+  --color-danger:           var(--palette-red-600);
+  --color-danger-soft:      rgba(220, 38, 38, 0.08);
+
+  --color-text-primary:     var(--palette-slate-900);
+  --color-text-secondary:   var(--palette-slate-700);
+  --color-text-muted:       var(--palette-slate-500);
+  --color-text-faint:       var(--palette-slate-400);
+  --color-text-inverse:     #ffffff;
+  --color-text-on-primary:  #090e17;
+
+  --color-border-subtle:    rgba(15, 23, 42, 0.07);
+  --color-border-card:      rgba(15, 23, 42, 0.09);
+  --color-border-hover:     rgba(15, 23, 42, 0.18);
+  --color-border-focus:     var(--palette-green-600);
+  --color-border-strong:    rgba(15, 23, 42, 0.28);
+
+  --shadow-xs:  0 1px 2px   0    rgba(15,23,42,0.04);
+  --shadow-sm:  0 2px 5px   0    rgba(15,23,42,0.05),
+                0 1px 2px   0    rgba(15,23,42,0.03);
+  --shadow-md:  0 6px 18px -3px  rgba(15,23,42,0.07),
+                0 2px 6px  -1px  rgba(15,23,42,0.04);
+  --shadow-lg:  0 14px 30px -4px rgba(15,23,42,0.09),
+                0 4px  10px -2px rgba(15,23,42,0.03);
+  --shadow-xl:  0 24px 48px -8px rgba(15,23,42,0.12),
+                0 8px  16px -4px rgba(15,23,42,0.05);
+  --shadow-2xl: 0 40px 80px -12px rgba(15,23,42,0.16);
+  --shadow-brand:  0 4px 20px rgba(5,150,105,0.18);
+  --shadow-accent: 0 4px 20px rgba(217,119,6,0.18);
+
+  --color-bg-hover:         var(--palette-slate-100);
+  --color-bg-active:        var(--palette-slate-200);
+  --color-overlay:          rgba(15, 23, 42, 0.55);
+
+  --color-nav-bg:           rgba(255, 255, 255, 0.92);
+  --color-nav-border:       rgba(15, 23, 42, 0.08);
+
+  --gradient-cta:           linear-gradient(135deg, var(--palette-green-600) 0%, var(--palette-green-500) 100%);
+  --gradient-cta-hover:     linear-gradient(135deg, var(--palette-green-700) 0%, var(--palette-green-600) 100%);
+  --gradient-heading:       linear-gradient(135deg, var(--palette-green-600) 0%, var(--palette-blue-500)  100%);
+  --gradient-heading-amber: linear-gradient(135deg, var(--palette-amber-600) 0%, var(--palette-red-500)   100%);
+  --gradient-hero-glow:     radial-gradient(ellipse at 50% 0%, rgba(5,150,105,0.18) 0%, rgba(2,132,199,0.06) 50%, transparent 75%);
+
+  --slot-available-bg:     rgba(5, 150, 105, 0.08);
+  --slot-available-border: rgba(5, 150, 105, 0.24);
+  --slot-available-text:   var(--palette-green-700);
+  --slot-booked-bg:        var(--palette-slate-100);
+  --slot-booked-border:    var(--palette-slate-200);
+  --slot-booked-text:      var(--palette-slate-400);
+  --slot-peak-bg:          rgba(217, 119, 6, 0.10);
+  --slot-peak-border:      rgba(217, 119, 6, 0.24);
+  --slot-peak-text:        var(--palette-amber-700);
+
+  --badge-bg:              rgba(5, 150, 105, 0.08);
+  --badge-border:          rgba(5, 150, 105, 0.28);
+  --badge-text:            var(--palette-green-600);
+
+  --color-input-bg:        #ffffff;
+  --color-input-bg-hover:  var(--palette-slate-50);
+  --shadow-input-focus:    0 0 0 3px rgba(5,150,105,0.18);
+
+  /* Semantic aliases — same as :root */
+  --bg-main:              var(--color-bg);
+  --bg-surface:           var(--color-surface-muted);
+  --bg-surface-elevated:  var(--color-surface-elevated);
+  --bg-surface-card:      var(--color-surface-card);
+  --bg-surface-inset:     var(--color-surface-inset);
+  --bg-glass:             rgba(255,255,255,0.92);
+  --bg-glass-heavy:       rgba(255,255,255,0.97);
+  --bg-input:             var(--color-input-bg);
+  --bg-hover:             var(--color-bg-hover);
+  --bg-active:            var(--color-bg-active);
+
+  --text-primary:         var(--color-text-primary);
+  --text-secondary:       var(--color-text-secondary);
+  --text-muted:           var(--color-text-muted);
+  --text-faint:           var(--color-text-faint);
+  --text-inverse:         var(--color-text-inverse);
+  --text-on-primary:      var(--color-text-on-primary);
+
+  --border-subtle:        var(--color-border-subtle);
+  --border-card:          var(--color-border-card);
+  --border-hover:         var(--color-border-hover);
+  --border-focus:         var(--color-border-focus);
+  --border-strong:        var(--color-border-strong);
+
+  --brand-primary:        var(--color-primary);
+  --brand-primary-hover:  var(--color-primary-hover);
+  --brand-primary-glow:   var(--color-primary-glow);
+  --brand-primary-soft:   var(--color-primary-soft);
+  --brand-secondary:      var(--color-secondary);
+  --brand-secondary-hover:var(--color-secondary-hover);
+  --brand-accent:         var(--color-accent);
+  --brand-accent-hover:   var(--color-accent-hover);
+  --brand-accent-glow:    var(--color-accent-glow);
+  --brand-danger:         var(--color-danger);
+
+  --card-bg:              var(--bg-surface-card);
+  --card-border:          var(--border-card);
+  --card-shadow:          var(--shadow-md);
+  --card-shadow-elevated: var(--shadow-lg);
+  --card-radius:          var(--radius-xl);
+
+  --nav-backdrop:         var(--color-nav-bg);
+  --nav-border:           var(--color-nav-border);
+  --overlay-bg:           var(--color-overlay);
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   10. DARK THEME TOKENS
+       Deep architectural obsidian canvas · layered dark surfaces ·
+       crisp athletic contrast · high-legibility brand colors
+   ══════════════════════════════════════════════════════════════════════════ */
+[data-theme="dark"],
+.dark {
+  color-scheme: dark;
+
+  /* ── Surface stack */
+  --color-bg:               #090e17;    /* Deep obsidian canvas */
+  --color-surface:          #0f1726;    /* Secondary band */
+  --color-surface-muted:    #0d131f;    /* Page-level alt band */
+  --color-surface-elevated: #162032;    /* Elevated panels, modals */
+  --color-surface-card:     #121a29;    /* Card face */
+  --color-surface-inset:    #0e1522;    /* Input wells, inset areas */
+
+  /* ── Brand palette — shifted for dark legibility */
+  --color-primary:          var(--palette-green-500);   /* #10b981 */
+  --color-primary-hover:    var(--palette-green-400);   /* #34d399 */
+  --color-primary-active:   #6ee7b7;
+  --color-primary-glow:     rgba(16, 185, 129, 0.28);
+  --color-primary-soft:     rgba(16, 185, 129, 0.12);
+  --color-primary-border:   rgba(16, 185, 129, 0.32);
+
+  --color-secondary:        var(--palette-blue-400);    /* #38bdf8 */
+  --color-secondary-hover:  #7dd3fc;
+  --color-secondary-soft:   rgba(56, 189, 248, 0.12);
+
+  --color-accent:           var(--palette-amber-400);   /* #fbbf24 */
+  --color-accent-hover:     var(--palette-amber-500);
+  --color-accent-soft:      rgba(251, 191, 36, 0.12);
+  --color-accent-glow:      rgba(251, 191, 36, 0.24);
+
+  --color-danger:           var(--palette-red-400);     /* #f87171 */
+  --color-danger-soft:      rgba(248, 113, 113, 0.12);
+
+  --color-success:          var(--palette-green-500);
+  --color-success-soft:     rgba(16, 185, 129, 0.12);
+
+  /* ── Typography */
+  --color-text-primary:     #f8fafc;
+  --color-text-secondary:   var(--palette-slate-300);
+  --color-text-muted:       var(--palette-slate-400);
+  --color-text-faint:       var(--palette-slate-500);
+  --color-text-inverse:     #090e17;
+  --color-text-on-primary:  #090e17;
+
+  /* ── Borders — crisp, subtle on dark */
+  --color-border-subtle:    rgba(255, 255, 255, 0.08);
+  --color-border-card:      rgba(255, 255, 255, 0.10);
+  --color-border-hover:     rgba(255, 255, 255, 0.22);
+  --color-border-focus:     var(--palette-green-500);
+  --color-border-strong:    rgba(255, 255, 255, 0.32);
+
+  /* ── Shadows — deeper, no grey wash */
+  --shadow-xs:  0 1px 2px   0    rgba(0,0,0,0.35);
+  --shadow-sm:  0 2px 5px   0    rgba(0,0,0,0.45);
+  --shadow-md:  0 6px 18px -2px  rgba(0,0,0,0.55),
+                0 2px 6px  -1px  rgba(0,0,0,0.35);
+  --shadow-lg:  0 14px 32px -4px rgba(0,0,0,0.65),
+                0 4px  12px -2px rgba(0,0,0,0.45);
+  --shadow-xl:  0 24px 50px -8px rgba(0,0,0,0.80);
+  --shadow-2xl: 0 40px 80px -12px rgba(0,0,0,0.90);
+  --shadow-brand:  0 4px 24px rgba(16,185,129,0.28);
+  --shadow-accent: 0 4px 24px rgba(251,191,36,0.22);
+
+  /* ── Interactive states */
+  --color-bg-hover:         #162032;
+  --color-bg-active:        #1d2a42;
+  --color-overlay:          rgba(0, 0, 0, 0.78);
+
+  /* ── Nav */
+  --color-nav-bg:           rgba(9, 14, 23, 0.90);
+  --color-nav-border:       rgba(255, 255, 255, 0.07);
+
+  /* ── CTA gradient (brighter in dark for punch) */
+  --gradient-cta:           linear-gradient(135deg,
+                              var(--palette-green-500) 0%,
+                              var(--palette-green-400) 100%);
+  --gradient-cta-hover:     linear-gradient(135deg,
+                              var(--palette-green-600) 0%,
+                              var(--palette-green-500) 100%);
+
+  /* ── Heading gradients */
+  --gradient-heading:       linear-gradient(135deg,
+                              var(--palette-green-400) 0%,
+                              var(--palette-blue-400)  100%);
+  --gradient-heading-amber: linear-gradient(135deg,
+                              var(--palette-amber-400) 0%,
+                              var(--palette-red-400)   100%);
+
+  /* ── Hero ambient glow */
+  --gradient-hero-glow:     radial-gradient(ellipse at 50% 0%,
+                              rgba(16,185,129,0.20) 0%,
+                              rgba(56,189,248,0.08) 50%,
+                              transparent 75%);
+
+  /* ── Slots */
+  --slot-available-bg:     rgba(16, 185, 129, 0.12);
+  --slot-available-border: rgba(16, 185, 129, 0.32);
+  --slot-available-text:   var(--palette-green-400);
+  --slot-booked-bg:        rgba(255, 255, 255, 0.03);
+  --slot-booked-border:    rgba(255, 255, 255, 0.06);
+  --slot-booked-text:      var(--palette-slate-500);
+  --slot-peak-bg:          rgba(251, 191, 36, 0.12);
+  --slot-peak-border:      rgba(251, 191, 36, 0.28);
+  --slot-peak-text:        var(--palette-amber-400);
+
+  /* ── Badges */
+  --badge-bg:              rgba(16, 185, 129, 0.12);
+  --badge-border:          rgba(16, 185, 129, 0.32);
+  --badge-text:            var(--palette-green-400);
+
+  /* ── Forms */
+  --color-input-bg:        #0e1522;
+  --color-input-bg-hover:  #131c2d;
+  --shadow-input-focus:    0 0 0 3px rgba(16,185,129,0.22);
+
+  /* ── Semantic aliases (dark overrides) */
+  --bg-main:              var(--color-bg);
+  --bg-surface:           var(--color-surface);
+  --bg-surface-elevated:  var(--color-surface-elevated);
+  --bg-surface-card:      var(--color-surface-card);
+  --bg-surface-inset:     var(--color-surface-inset);
+  --bg-glass:             rgba(18,26,41,0.88);
+  --bg-glass-heavy:       rgba(14,21,34,0.96);
+  --bg-input:             var(--color-input-bg);
+  --bg-hover:             var(--color-bg-hover);
+  --bg-active:            var(--color-bg-active);
+
+  --text-primary:         var(--color-text-primary);
+  --text-secondary:       var(--color-text-secondary);
+  --text-muted:           var(--color-text-muted);
+  --text-faint:           var(--color-text-faint);
+  --text-inverse:         var(--color-text-inverse);
+  --text-on-primary:      var(--color-text-on-primary);
+
+  --border-subtle:        var(--color-border-subtle);
+  --border-card:          var(--color-border-card);
+  --border-hover:         var(--color-border-hover);
+  --border-focus:         var(--color-border-focus);
+  --border-strong:        var(--color-border-strong);
+
+  --brand-primary:        var(--color-primary);
+  --brand-primary-hover:  var(--color-primary-hover);
+  --brand-primary-glow:   var(--color-primary-glow);
+  --brand-primary-soft:   var(--color-primary-soft);
+  --brand-secondary:      var(--color-secondary);
+  --brand-secondary-hover:var(--color-secondary-hover);
+  --brand-accent:         var(--color-accent);
+  --brand-accent-hover:   var(--color-accent-hover);
+  --brand-accent-glow:    var(--color-accent-glow);
+  --brand-danger:         var(--color-danger);
+
+  --card-bg:              var(--bg-surface-card);
+  --card-border:          var(--border-card);
+  --card-shadow:          var(--shadow-md);
+  --card-shadow-elevated: var(--shadow-lg);
+  --card-radius:          var(--radius-xl);
+
+  --nav-backdrop:         var(--color-nav-bg);
+  --nav-border:           var(--color-nav-border);
+  --overlay-bg:           var(--color-overlay);
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   11. ACCESSIBILITY — PREFERS-REDUCED-MOTION
+   ══════════════════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration:        0.001ms !important;
+    animation-iteration-count: 1       !important;
+    transition-duration:       0.001ms !important;
+    scroll-behavior:           auto    !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   12. SPEC-REQUESTED SEMANTIC VARIABLE ALIASES
+       These aliases map the spec-defined names to the existing token system.
+       Components may use either naming convention — both resolve correctly.
+   ══════════════════════════════════════════════════════════════════════════ */
+:root,
+[data-theme="light"],
+[data-theme="dark"],
+.light,
+.dark {
+  /* Backgrounds */
+  --color-background:         var(--bg-main);
+  --color-surface-elevated:   var(--bg-surface-elevated);
+  --color-surface-muted:      var(--bg-surface);
+
+  /* Text */
+  --color-text:               var(--text-primary);
+  --color-text-secondary:     var(--text-secondary);
+  --color-text-muted:         var(--text-muted);
+
+  /* Brand */
+  /* --color-primary and its hover token are already defined per theme. */
+  --color-secondary:          var(--brand-secondary);
+
+  /* States */
+  --color-success:            var(--brand-primary);
+  --color-danger:              var(--brand-danger);
+  --color-warning:             var(--brand-accent);
+
+  /* Borders */
+  --color-border:             var(--border-subtle);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   13. DATE PICKER INDICATOR STYLING
+   Ensure calendar icon is crisp, visible, and interactive in both themes
+   ══════════════════════════════════════════════════════════════════════════ */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  border-radius: var(--radius-xs, 4px);
+  padding: 2px;
+  opacity: 0.85;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+  transform: scale(1.08);
+}
