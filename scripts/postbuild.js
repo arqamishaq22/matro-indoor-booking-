@@ -17,9 +17,10 @@ if (fs.existsSync(indexHtml)) {
 
 const vercelConfig = {
   rewrites: [
+    { source: '/api/(.*)', destination: 'https://matro-indoor-booking-indol.vercel.app/api/$1' },
     { source: '/(.*)', destination: '/index.html' }
   ]
 };
 
 fs.writeFileSync(vercelJson, JSON.stringify(vercelConfig, null, 2), 'utf-8');
-console.log('✓ Generated dist/vercel.json for Vercel SPA routing');
+console.log('✓ Generated dist/vercel.json for Vercel SPA routing and API proxying');
