@@ -77,10 +77,13 @@ const LoginPage = () => {
   const validate = () => {
     const e = {};
     const phoneClean = phone.trim();
+    const phoneDigits = phoneClean.replace(/\D/g, '');
     if (!phoneClean) {
       e.phone = 'Phone number is required';
-    } else if (!/^\+?[0-9\s\-()]{7,20}$/.test(phoneClean)) {
-      e.phone = 'Enter a valid phone number (7–20 digits)';
+    } else if (phoneDigits.length > 11) {
+      e.phone = 'Phone number must not contain more than 11 digits';
+    } else if (phoneDigits.length < 11 || !/^0\d{10}$/.test(phoneDigits)) {
+      e.phone = 'Enter a valid 11-digit phone number (e.g. 03001234567)';
     }
 
     if (!password) {
@@ -95,8 +98,13 @@ const LoginPage = () => {
     e.target.style.borderColor = fieldErrors.phone ? 'var(--brand-danger)' : 'var(--border-subtle)';
     const phoneClean = phone.trim();
     if (!phoneClean) return;
-    if (!/^\+?[0-9\s\-()]{7,20}$/.test(phoneClean)) {
-      setFieldErrors((p) => ({ ...p, phone: 'Enter a valid phone number (7–20 digits)' }));
+    const phoneDigits = phoneClean.replace(/\D/g, '');
+    if (phoneDigits.length > 11) {
+      setFieldErrors((p) => ({ ...p, phone: 'Phone number must not contain more than 11 digits' }));
+      return;
+    }
+    if (phoneDigits.length < 11 || !/^0\d{10}$/.test(phoneDigits)) {
+      setFieldErrors((p) => ({ ...p, phone: 'Enter a valid 11-digit phone number (e.g. 03001234567)' }));
       return;
     }
     try {
@@ -212,9 +220,17 @@ const LoginPage = () => {
                 <div style={{ position:'relative' }}>
                   <Phone size={15} color="var(--text-faint)" aria-hidden="true" style={{ position:'absolute', left:'0.9rem', top:'50%', transform:'translateY(-50%)', pointerEvents:'none' }} />
                   <input
-                    id="login-phone" className="auth-input" type="tel" value={phone} autoComplete="tel" required aria-invalid={Boolean(fieldErrors.phone)} aria-describedby={fieldErrors.phone ? 'login-phone-error' : undefined}
-                    placeholder="e.g. 0300-1234567"
-                    onChange={(e) => { setPhone(e.target.value); setFieldErrors(p => ({...p, phone:undefined})); }}
+                    id="login-phone" className="auth-input" type="tel" value={phone} autoComplete="tel" required maxLength={11} aria-invalid={Boolean(fieldErrors.phone)} aria-describedby={fieldErrors.phone ? 'login-phone-error' : undefined}
+                    placeholder="e.g. 03001234567"
+                    onChange={(e) => {
+                      let val = e.target.value.replace(/\D/g, '');
+                      if (val.startsWith('92') && val.length > 11) {
+                        val = '0' + val.slice(2);
+                      }
+                      val = val.slice(0, 11);
+                      setPhone(val);
+                      setFieldErrors((p) => ({ ...p, phone: undefined }));
+                    }}
                     style={{ ...inputBase(!!fieldErrors.phone), paddingLeft:'2.6rem' }}
                     onFocus={(e) => (e.target.style.borderColor = 'var(--brand-primary)')}
                     onBlur={handlePhoneBlur}

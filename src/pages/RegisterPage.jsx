@@ -154,9 +154,12 @@ const RegisterPage = () => {
       e.name = "Name must be at least 2 characters";
 
     const phoneClean = phone.trim();
+    const phoneDigits = phoneClean.replace(/\D/g, '');
     if (!phoneClean) e.phone = "Phone number is required";
-    else if (!/^\+?[0-9\s\-()]{7,20}$/.test(phoneClean))
-      e.phone = "Enter a valid phone number (7–20 digits)";
+    else if (phoneDigits.length > 11)
+      e.phone = "Phone number must not contain more than 11 digits";
+    else if (phoneDigits.length < 11 || !/^0\d{10}$/.test(phoneDigits))
+      e.phone = "Enter a valid 11-digit phone number (e.g. 03001234567)";
 
     if (!password) e.password = "Password is required";
     else if (password.length < 8)
@@ -175,8 +178,13 @@ const RegisterPage = () => {
     onBlur(e, !!fieldErrors.phone);
     const phoneClean = phone.trim();
     if (!phoneClean) return;
-    if (!/^\+?[0-9\s\-()]{7,20}$/.test(phoneClean)) {
-      setFieldErrors((p) => ({ ...p, phone: "Enter a valid phone number (7–20 digits)" }));
+    const phoneDigits = phoneClean.replace(/\D/g, '');
+    if (phoneDigits.length > 11) {
+      setFieldErrors((p) => ({ ...p, phone: "Phone number must not contain more than 11 digits" }));
+      return;
+    }
+    if (phoneDigits.length < 11 || !/^0\d{10}$/.test(phoneDigits)) {
+      setFieldErrors((p) => ({ ...p, phone: "Enter a valid 11-digit phone number (e.g. 03001234567)" }));
       return;
     }
     try {
@@ -451,13 +459,19 @@ const RegisterPage = () => {
                     value={phone}
                     autoComplete="tel"
                     required
+                    maxLength={11}
                     aria-invalid={!!fieldErrors.phone}
                     aria-describedby={
                       fieldErrors.phone ? "reg-phone-err" : undefined
                     }
-                    placeholder="e.g. 0300-1234567"
+                    placeholder="e.g. 03001234567"
                     onChange={(e) => {
-                      setPhone(e.target.value);
+                      let val = e.target.value.replace(/\D/g, '');
+                      if (val.startsWith('92') && val.length > 11) {
+                        val = '0' + val.slice(2);
+                      }
+                      val = val.slice(0, 11);
+                      setPhone(val);
                       setFieldErrors((p) => ({ ...p, phone: undefined }));
                     }}
                     style={{

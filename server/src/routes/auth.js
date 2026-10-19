@@ -33,8 +33,17 @@ const DUMMY_PASSWORD_HASH = bcrypt.hashSync('matro-auth-timing-only', BCRYPT_ROU
 const registerValidators = [
   body('phone')
     .isString().withMessage('phone must be a string').bail()
-    .trim().notEmpty().withMessage('phone is required')
-    .matches(/^\+?[0-9\s\-()]{7,20}$/).withMessage('phone must be 7–20 digits'),
+    .trim().notEmpty().withMessage('phone is required').bail()
+    .custom((val) => {
+      const digits = val.replace(/\D/g, '');
+      if (digits.length > 11) {
+        throw new Error('Phone number must not exceed 11 digits');
+      }
+      if (digits.length < 10) {
+        throw new Error('Phone number must be at least 10–11 digits');
+      }
+      return true;
+    }),
   body('password')
     .isString().withMessage('password must be a string').bail()
     .isLength({ min: 8 }).withMessage('password must be at least 8 characters')
@@ -64,7 +73,14 @@ const loginValidators = [
   body('phone')
     .optional()
     .isString().withMessage('phone must be a string').bail()
-    .trim().notEmpty().withMessage('phone cannot be empty'),
+    .trim().notEmpty().withMessage('phone cannot be empty').bail()
+    .custom((val) => {
+      const digits = val.replace(/\D/g, '');
+      if (digits.length > 11) {
+        throw new Error('Phone number must not exceed 11 digits');
+      }
+      return true;
+    }),
   body('email')
     .optional()
     .isString().withMessage('email must be a string').bail()
@@ -116,6 +132,10 @@ router.get(
     const phone = req.query.phone?.trim();
     if (!phone) {
       return badRequest(res, 'phone query parameter is required');
+    }
+    const digits = phone.replace(/\D/g, '');
+    if (digits.length > 11) {
+      return badRequest(res, 'Phone number must not exceed 11 digits');
     }
     try {
       const variants = getPhoneVariants(phone);

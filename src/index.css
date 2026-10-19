@@ -997,6 +997,8 @@ textarea:focus-visible,
   width: min(100%, 560px);
   max-height: min(90dvh, 820px);
   overscroll-behavior: contain;
+  display: flex;
+  flex-direction: column;
 }
 
 .booking-modal-container {
@@ -1027,12 +1029,17 @@ textarea:focus-visible,
 
   .booking-dialog-panel {
     max-height: calc(100dvh - 1rem) !important;
+    height: calc(100dvh - 1rem) !important;
     border-radius: var(--radius-xl) var(--radius-xl) 0 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
   }
 
   .booking-modal-container {
     align-items: flex-end !important;
     padding: 0 !important;
+    touch-action: pan-y !important;
   }
 }
 

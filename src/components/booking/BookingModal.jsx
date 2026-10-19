@@ -401,10 +401,14 @@ function StepDetails({ titleId, descId, onClose }) {
 
   const validate = () => {
     const e = {};
+    const phoneClean = phone.trim();
+    const phoneDigits = phoneClean.replace(/\D/g, '');
     if (!name.trim()) e.name = "Player name is required.";
-    if (!phone.trim()) e.phone = "Phone number is required.";
-    else if (!/^[0-9+\s\-()]{7,15}$/.test(phone.trim()))
-      e.phone = "Enter a valid phone number (7–15 digits).";
+    if (!phoneClean) e.phone = "Phone number is required.";
+    else if (phoneDigits.length > 11)
+      e.phone = "Phone number must not contain more than 11 digits.";
+    else if (phoneDigits.length < 11 || !/^0\d{10}$/.test(phoneDigits))
+      e.phone = "Enter a valid 11-digit phone number (e.g. 03001234567).";
     return e;
   };
 
@@ -529,7 +533,16 @@ function StepDetails({ titleId, descId, onClose }) {
     <form
       onSubmit={handleSubmit}
       noValidate
-      style={{ display: "flex", flexDirection: "column", gap: "0" }}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "0",
+        flex: "1 1 auto",
+        minHeight: 0,
+        height: "100%",
+        maxHeight: "100%",
+        overflow: "hidden",
+      }}
     >
       {/* ── Header ──────────────────────────────────────────── */}
       <div
@@ -592,11 +605,15 @@ function StepDetails({ titleId, descId, onClose }) {
       <div
         style={{
           overflowY: "auto",
+          WebkitOverflowScrolling: "touch",
+          touchAction: "pan-y",
+          overscrollBehavior: "contain",
           padding: "1.25rem 1.5rem",
           display: "flex",
           flexDirection: "column",
           gap: "1.25rem",
           flex: "1 1 auto",
+          minHeight: 0,
         }}
       >
         {/* Not-logged-in banner */}
@@ -853,12 +870,18 @@ function StepDetails({ titleId, descId, onClose }) {
             id="bm-phone"
             type="tel"
             value={phone}
+            maxLength={11}
             onChange={(e) => {
-              setPhone(e.target.value);
+              let val = e.target.value.replace(/\D/g, '');
+              if (val.startsWith('92') && val.length > 11) {
+                val = '0' + val.slice(2);
+              }
+              val = val.slice(0, 11);
+              setPhone(val);
               setErrors((p) => ({ ...p, phone: undefined }));
               setApiError("");
             }}
-            placeholder="e.g. 0300-1234567"
+            placeholder="e.g. 03001234567"
             autoComplete="tel"
             aria-required="true"
             aria-invalid={!!errors.phone}
@@ -1023,7 +1046,17 @@ function StepSuccess({ titleId, descId, onClose, onBookAnother }) {
   const isDemo = booking._isDemoData === true;
 
   return (
-    <div style={{ display: "flex", flexDirection: "column" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        flex: "1 1 auto",
+        minHeight: 0,
+        height: "100%",
+        maxHeight: "100%",
+        overflow: "hidden",
+      }}
+    >
       {/* ── Header ───────────────────────────────────────── */}
       <div
         style={{
@@ -1087,11 +1120,15 @@ function StepSuccess({ titleId, descId, onClose, onBookAnother }) {
       <div
         style={{
           overflowY: "auto",
+          WebkitOverflowScrolling: "touch",
+          touchAction: "pan-y",
+          overscrollBehavior: "contain",
           padding: "1.5rem",
           display: "flex",
           flexDirection: "column",
           gap: "1.25rem",
           flex: "1 1 auto",
+          minHeight: 0,
         }}
       >
         {/* Success badge */}
@@ -1582,7 +1619,11 @@ const BookingModal = () => {
                     style={{
                       display: "flex",
                       flexDirection: "column",
+                      flex: "1 1 auto",
                       minHeight: 0,
+                      height: "100%",
+                      maxHeight: "100%",
+                      overflow: "hidden",
                     }}
                   >
                     <StepDetails
@@ -1601,7 +1642,11 @@ const BookingModal = () => {
                     style={{
                       display: "flex",
                       flexDirection: "column",
+                      flex: "1 1 auto",
                       minHeight: 0,
+                      height: "100%",
+                      maxHeight: "100%",
+                      overflow: "hidden",
                     }}
                   >
                     <StepSuccess

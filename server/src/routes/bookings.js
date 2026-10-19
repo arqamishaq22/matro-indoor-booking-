@@ -86,8 +86,17 @@ const createBookingValidators = [
     .isLength({ max: 120 }).withMessage('playerName too long'),
   body('phone')
     .isString().withMessage('phone must be a string').bail()
-    .trim().notEmpty().withMessage('phone is required')
-    .matches(/^[0-9+\s\-()\/.]{7,20}$/).withMessage('phone must be 7–20 digits'),
+    .trim().notEmpty().withMessage('phone is required').bail()
+    .custom((val) => {
+      const digits = val.replace(/\D/g, '');
+      if (digits.length > 11) {
+        throw new Error('Phone number must not exceed 11 digits');
+      }
+      if (digits.length < 10) {
+        throw new Error('Phone number must be at least 10–11 digits');
+      }
+      return true;
+    }),
   body('notes')
     .optional().trim().isLength({ max: 500 }).withMessage('notes too long'),
 ];
