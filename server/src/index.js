@@ -123,7 +123,10 @@ async function start() {
   }
 }
 
-start();
+/* Run listener if executed directly (e.g. locally or on Render/Railway) */
+if (!process.env.VERCEL) {
+  start();
+}
 
 /* Graceful shutdown */
 process.on('SIGTERM', async () => {
@@ -131,3 +134,5 @@ process.on('SIGTERM', async () => {
   await prisma.$disconnect();
   process.exit(0);
 });
+
+module.exports = app;
