@@ -1,4 +1,4 @@
-const API_BASE = (import.meta.env.VITE_API_BASE_URL ?? '').replace(/\/+$/, '');
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || 'https://matro-indoor-booking-indol.vercel.app').replace(/\/+$/, '');
 
 export async function apiRequest(path, options = {}) {
   const { token, onUnauthorized, headers: requestHeaders, ...fetchOptions } = options;
