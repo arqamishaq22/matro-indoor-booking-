@@ -42,12 +42,21 @@ const allowedOrigins = (process.env.ALLOWED_ORIGINS ?? 'http://localhost:5173')
 /* Security headers */
 app.use(helmet());
 
-/* CORS — only allow configured frontend origins */
+/* CORS — allow configured frontend origins and all vercel.app domains */
 app.use(cors({
   origin: (origin, cb) => {
-    /* Allow requests with no origin (e.g. curl, Postman) in development */
-    if (!origin || process.env.NODE_ENV !== 'production') return cb(null, true);
-    if (allowedOrigins.includes(origin)) return cb(null, true);
+    /* Allow requests with no origin (e.g. curl, Postman) */
+    if (!origin) return cb(null, true);
+
+    /* Allow any .vercel.app domain, localhost, or configured allowedOrigins */
+    if (
+      origin.endsWith('.vercel.app') ||
+      origin.includes('localhost') ||
+      allowedOrigins.includes(origin)
+    ) {
+      return cb(null, true);
+    }
+
     cb(new Error(`CORS: Origin ${origin} not allowed`));
   },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
