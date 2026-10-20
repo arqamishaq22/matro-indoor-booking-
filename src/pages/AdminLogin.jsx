@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from 'motion/react';
 import { Phone, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import {
   login,
+  logout,
   clearAuthError,
   selectAuthLoading,
   selectAuthError,
@@ -136,11 +137,48 @@ const AdminLogin = () => {
     return (
       <>
         <Navbar />
-        <main id="main-content" style={{ minHeight:'calc(100dvh - var(--nav-height))', display:'flex', alignItems:'center', justifyContent:'center' }}>
-          <div style={{ textAlign:'center' }}>
+        <main id="main-content" style={{ minHeight:'calc(100dvh - var(--nav-height))', display:'flex', alignItems:'center', justifyContent:'center', padding:'2rem 1rem' }}>
+          <div style={{ textAlign:'center', maxWidth:'440px', margin:'0 auto' }}>
             <AlertCircle size={48} color="var(--brand-danger)" style={{ margin:'0 auto 1rem' }} />
-            <h1 style={{ fontSize:'var(--text-2xl)', fontWeight:'var(--fw-bold)' }}>Unauthorized</h1>
-            <p style={{ marginTop:'0.5rem', color:'var(--text-muted)' }}>You do not have administrator access.</p>
+            <h1 style={{ fontSize:'var(--text-2xl)', fontWeight:'var(--fw-bold)', marginBottom:'0.5rem' }}>Unauthorized</h1>
+            <p style={{ color:'var(--text-muted)', marginBottom:'1.5rem', lineHeight:1.5 }}>
+              You are currently signed in as a customer account. Please log out to sign in with your administrator account.
+            </p>
+            <div style={{ display:'flex', gap:'0.75rem', justifyContent:'center', flexWrap:'wrap' }}>
+              <button
+                type="button"
+                onClick={() => dispatch(logout())}
+                style={{
+                  padding: '0.65rem 1.25rem',
+                  borderRadius: 'var(--radius-md)',
+                  background: 'var(--gradient-cta)',
+                  color: '#fff',
+                  border: 'none',
+                  fontWeight: 'var(--fw-semibold)',
+                  fontSize: 'var(--text-sm)',
+                  cursor: 'pointer',
+                  boxShadow: 'var(--shadow-brand)',
+                }}
+              >
+                Log Out & Sign In as Admin
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate('/')}
+                style={{
+                  padding: '0.65rem 1.25rem',
+                  borderRadius: 'var(--radius-md)',
+                  background: 'var(--bg-surface-elevated)',
+                  color: 'var(--text-primary)',
+                  border: '1px solid var(--border-subtle)',
+                  fontWeight: 'var(--fw-semibold)',
+                  fontSize: 'var(--text-sm)',
+                  cursor: 'pointer',
+                }}
+              >
+                Go to Home
+              </button>
+            </div>
           </div>
         </main>
         <Footer />
