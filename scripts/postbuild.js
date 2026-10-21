@@ -17,6 +17,7 @@ if (fs.existsSync(indexHtml)) {
 
 const vercelConfig = {
   rewrites: [
+    { source: '/api/(.*)', destination: 'https://matro-indoor-booking-indol.vercel.app/api/$1' },
     { source: '/(.*)', destination: '/index.html' }
   ]
 };
